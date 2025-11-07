@@ -1,0 +1,122 @@
+# AWS Resource Optimizer Configuration
+# Customize these thresholds based on your organization's needs
+
+# EC2 Instance Detection Rules
+ec2:
+  # CPU utilization threshold (percentage)
+  cpu_threshold: 5
+  
+  # Number of days to analyze
+  days_to_check: 14
+  
+  # Minimum hours running to be considered for analysis
+  minimum_runtime_hours: 24
+  
+  # Instance types to exclude from analysis
+  exclude_instance_types:
+    - t2.nano
+    - t3.nano
+  
+  # Tags that indicate instances should be excluded
+  exclude_tags:
+    - Environment: production
+    - DoNotOptimize: true
+
+# RDS Database Detection Rules  
+rds:
+  # CPU utilization threshold (percentage)
+  cpu_threshold: 10
+  
+  # Database connections threshold (average per day)
+  connection_threshold: 5
+  
+  # Days to analyze
+  days_to_check: 14
+  
+  # Exclude database engines
+  exclude_engines:
+    - aurora-mysql
+    - aurora-postgresql
+  
+  # Minimum database age in days before analysis
+  minimum_age_days: 7
+
+# EBS Volume Detection Rules
+ebs:
+  # Days to check for attachment status
+  days_to_check: 7
+  
+  # IOPS utilization threshold (percentage)
+  iops_threshold: 1
+  
+  # Exclude volumes with these tags
+  exclude_tags:
+    - Backup: true
+    - DoNotDelete: true
+  
+  # Volume types to analyze
+  include_volume_types:
+    - gp2
+    - gp3
+    - io1
+    - io2
+
+# Load Balancer Detection Rules
+elb:
+  # Request count threshold (requests per day)
+  request_threshold: 100
+  
+  # Days to analyze
+  days_to_check: 14
+  
+  # Target health threshold (percentage of healthy targets)
+  healthy_target_threshold: 0
+
+# Lambda Function Detection Rules
+lambda:
+  # Days since last invocation
+  days_since_invocation: 30
+  
+  # Error rate threshold (percentage)
+  error_rate_threshold: 50
+  
+  # Memory utilization threshold (percentage)
+  memory_threshold: 10
+
+# CloudWatch Logs Detection Rules
+cloudwatch_logs:
+  # Days since last log entry
+  days_since_last_log: 30
+  
+  # Log groups with retention longer than this (days)
+  max_retention_days: 365
+  
+  # Exclude log groups matching these patterns
+  exclude_patterns:
+    - "/aws/lambda/*"
+    - "/aws/apigateway/*"
+
+# Cost Calculation Settings
+cost_calculation:
+  # AWS region for pricing (affects cost calculations)
+  pricing_region: "us-east-1"
+  
+  # Include data transfer costs in calculations
+  include_data_transfer: false
+  
+  # Currency for cost reporting
+  currency: "USD"
+
+# Reporting Settings
+reporting:
+  # Include recommendations in reports
+  include_recommendations: true
+  
+  # Group findings by service
+  group_by_service: true
+  
+  # Include cost breakdown
+  include_cost_breakdown: true
+  
+  # Maximum findings to include in report (0 = no limit)
+  max_findings: 0

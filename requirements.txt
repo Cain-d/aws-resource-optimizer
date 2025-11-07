@@ -1,0 +1,32 @@
+# AWS Resource Optimizer Dependencies
+
+# Core AWS SDK
+boto3>=1.26.0
+botocore>=1.29.0
+
+# Configuration and data handling
+PyYAML>=6.0
+click>=8.0.0
+jinja2>=3.1.0
+
+# Date and time handling
+python-dateutil>=2.8.0
+
+# Testing and development
+pytest>=7.0.0
+pytest-cov>=4.0.0
+moto>=4.0.0
+localstack-client>=1.0.0
+
+# Code quality
+black>=22.0.0
+flake8>=5.0.0
+mypy>=1.0.0
+
+# Documentation
+mkdocs>=1.4.0
+mkdocs-material>=8.0.0
+
+# Optional: For enhanced reporting
+matplotlib>=3.5.0
+plotly>=5.0.0

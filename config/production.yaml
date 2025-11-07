@@ -1,0 +1,129 @@
+# Production Configuration for AWS Resource Optimizer
+# Stricter thresholds for production environments
+
+# EC2 Instance Detection Rules
+ec2:
+  # Lower CPU threshold for production workloads
+  cpu_threshold: 3
+  
+  # Longer analysis period for better accuracy
+  days_to_check: 21
+  
+  # Minimum runtime before analysis
+  minimum_runtime_hours: 48
+  
+  # Exclude development instance types
+  exclude_instance_types:
+    - t2.nano
+    - t2.micro
+    - t3.nano
+    - t3.micro
+  
+  # Production exclusion tags
+  exclude_tags:
+    - Environment: production
+    - CriticalWorkload: true
+    - DoNotOptimize: true
+    - Owner: platform-team
+
+# RDS Database Detection Rules  
+rds:
+  # Conservative CPU threshold for databases
+  cpu_threshold: 5
+  
+  # Very low connection threshold
+  connection_threshold: 2
+  
+  # Extended analysis period
+  days_to_check: 21
+  
+  # Exclude production database engines
+  exclude_engines:
+    - aurora-mysql
+    - aurora-postgresql
+  
+  # Longer minimum age for database analysis
+  minimum_age_days: 14
+
+# EBS Volume Detection Rules
+ebs:
+  # Extended period for volume analysis
+  days_to_check: 14
+  
+  # Very low IOPS threshold
+  iops_threshold: 0.5
+  
+  # Production exclusion tags
+  exclude_tags:
+    - Backup: true
+    - DoNotDelete: true
+    - Environment: production
+    - DataRetention: required
+  
+  # Focus on expensive volume types
+  include_volume_types:
+    - gp3
+    - io1
+    - io2
+
+# Load Balancer Detection Rules
+elb:
+  # Higher request threshold for production
+  request_threshold: 50
+  
+  # Extended analysis period
+  days_to_check: 21
+  
+  # Require some healthy targets
+  healthy_target_threshold: 1
+
+# Lambda Function Detection Rules
+lambda:
+  # Longer period before considering unused
+  days_since_invocation: 45
+  
+  # Higher error rate threshold
+  error_rate_threshold: 25
+  
+  # Lower memory utilization threshold
+  memory_threshold: 5
+
+# CloudWatch Logs Detection Rules
+cloudwatch_logs:
+  # Longer period for log analysis
+  days_since_last_log: 45
+  
+  # Shorter retention for cost optimization
+  max_retention_days: 180
+  
+  # Exclude critical log groups
+  exclude_patterns:
+    - "/aws/lambda/production-*"
+    - "/aws/apigateway/production-*"
+    - "/aws/rds/instance/prod-*"
+    - "/application/production/*"
+
+# Cost Calculation Settings
+cost_calculation:
+  # Use primary region for pricing
+  pricing_region: "us-east-1"
+  
+  # Include data transfer in calculations
+  include_data_transfer: true
+  
+  # Currency for reporting
+  currency: "USD"
+
+# Reporting Settings
+reporting:
+  # Include detailed recommendations
+  include_recommendations: true
+  
+  # Group findings by service and severity
+  group_by_service: true
+  
+  # Include detailed cost breakdown
+  include_cost_breakdown: true
+  
+  # Limit findings to high-impact items
+  max_findings: 100
