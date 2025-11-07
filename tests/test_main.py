@@ -31,10 +31,10 @@ def test_project_structure():
     project_root = Path(__file__).parent.parent
     
     # Check essential files exist
-    assert (project_root / "README.md").exists()
-    assert (project_root / "requirements.txt").exists()
-    assert (project_root / "src" / "main.py").exists()
-    assert (project_root / "config" / "thresholds.yaml").exists()
+    assert (project_root / "README.md").exists(), "README.md should exist"
+    assert (project_root / "requirements.txt").exists(), "requirements.txt should exist"
+    assert (project_root / "src" / "main.py").exists(), "src/main.py should exist"
+    assert (project_root / "config" / "thresholds.yaml").exists(), "config/thresholds.yaml should exist"
 
 
 def test_requirements_file():
@@ -42,12 +42,27 @@ def test_requirements_file():
     project_root = Path(__file__).parent.parent
     requirements_file = project_root / "requirements.txt"
     
-    assert requirements_file.exists()
+    assert requirements_file.exists(), "requirements.txt should exist"
     
-    with open(requirements_file) as f:
+    with open(requirements_file, encoding='utf-8') as f:
         content = f.read()
-        assert "boto3" in content
-        assert "PyYAML" in content
+        assert "boto3" in content, "boto3 should be in requirements"
+        assert "PyYAML" in content, "PyYAML should be in requirements"
+
+
+def test_configuration_file():
+    """Test that configuration file is valid YAML."""
+    project_root = Path(__file__).parent.parent
+    config_file = project_root / "config" / "thresholds.yaml"
+    
+    assert config_file.exists(), "thresholds.yaml should exist"
+    
+    # Try to parse as YAML
+    import yaml
+    with open(config_file, encoding='utf-8') as f:
+        config = yaml.safe_load(f)
+        assert isinstance(config, dict), "Configuration should be a dictionary"
+        assert "ec2" in config, "Configuration should have ec2 section"
 
 
 class TestConfigLoader:
