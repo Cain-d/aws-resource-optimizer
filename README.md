@@ -2,6 +2,14 @@
 
 A production-ready tool for identifying idle AWS resources and calculating cost optimization opportunities across your cloud infrastructure.
 
+## Features
+
+- **Multi-Service Support**: Analyzes EC2, RDS, EBS, and more AWS services
+- **Cost Calculation**: Estimates potential monthly savings for each finding
+- **Flexible Deployment**: Run locally, deploy to AWS, or use with CI/CD
+- **Configurable Rules**: Customize thresholds via YAML configuration
+- **Multiple Output Formats**: JSON and HTML reports with detailed recommendations
+
 ## Quick Start
 
 ### Option 1: Test Against Your AWS Account (No Deployment)
@@ -46,7 +54,24 @@ Example findings from a typical AWS account:
 
 ## Architecture
 
-![Architecture Diagram](docs/architecture-diagram.png)
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   EventBridge   │───▶│  Lambda Function │───▶│   S3 Reports    │
+│   (Scheduler)   │    │   (Scanner)      │    │    Bucket       │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                │
+                                ▼
+                       ┌──────────────────┐    ┌─────────────────┐
+                       │   CloudWatch     │    │  SNS Topic      │
+                       │   (Metrics)      │    │ (Notifications) │
+                       └──────────────────┘    └─────────────────┘
+                                                        │
+                                                        ▼
+                                               ┌─────────────────┐
+                                               │ Email/Slack     │
+                                               │ Notifications   │
+                                               └─────────────────┘
+```
 
 - **Serverless**: Runs on Lambda, pay only when scanning
 - **Secure**: Least-privilege IAM roles, no data stored
@@ -77,8 +102,8 @@ rds:
 
 - [Deployment Guide](DEPLOYMENT.md) - Detailed setup instructions
 - [Architecture Overview](ARCHITECTURE.md) - System design and decisions
-- [Configuration Reference](docs/configuration.md) - All available options
-- [API Documentation](docs/api.md) - Integration endpoints
+- [FAQ](docs/FAQ.md) - Frequently asked questions
+- [Real-World Usage](examples/real-world-usage.md) - Case studies and examples
 
 ## Contributing
 
@@ -90,4 +115,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Estimated AWS costs to run**: $15-30/month for typical usage (see [cost breakdown](docs/cost-estimate.md))
+**Estimated AWS costs to run**: $15-30/month for typical usage (see [DEPLOYMENT.md](DEPLOYMENT.md) for details)
